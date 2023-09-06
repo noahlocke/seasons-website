@@ -1,0 +1,114 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { contentfulClient } from "../lib/contentful";
+import type { Person } from "../lib/contentful";
+
+const ownersEntries = await contentfulClient.getEntries<Person>({
+  content_type: "person",
+  "metadata.tags.sys.id[all]": "jobTypeOwner"
+});
+
+const leadersEntries = await contentfulClient.getEntries<Person>({
+  content_type: "person",
+  "metadata.tags.sys.id[all]": "jobTypeLeadership",
+  "metadata.tags.sys.id[nin]": "jobTypeOwner"
+});
+
+const owners = ownersEntries.items.map((item) => {
+  const { title, firstName, lastName, bio, jobTitle, slug, headshot, jobType } = item.fields;
+  return {
+    title,
+    firstName,
+	lastName,
+	bio,
+	jobTitle,
+	slug,
+	headshot
+  };
+});
+
+const leaders = leadersEntries.items.map((item) => {
+  const { title, firstName, lastName, bio, jobTitle, slug, headshot, jobType } = item.fields;
+  return {
+    title,
+    firstName,
+	lastName,
+	bio,
+	jobTitle,
+	slug,
+	headshot
+  };
+});
+---
+
+<Layout>
+	<main class="overflow-hidden">
+		<div class="bg-white">
+			<div class="mx-auto py-12 px-4 max-w-7xl sm:px-6 lg:px-8 lg:py-24">
+				<div class="space-y-12">
+					<div id="leadership" class="space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
+				  <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">About Seasons</h2>
+				</div>
+				<p class="mt-4 text-lg text-gray-500">Seasons Counseling LLC, established in 2015 by <a class="font-semibold text-seasons-blue-600 hover:text-seasons-blue-700" href="../providers/samuel-overlien-lcsw">Samuel Overlien, LCSW</a>, is a community-based mental health service provider. Samuel holds an undergraduate degree in Psychology from Northwestern-St. Paul and a Masters in Social Work from Loyola University-Chicago, with a specialized focus on mental health. His journey to gaining his clinical license began while working for an agency participating in the Comprehensive Community Services county program. It was during this time that he developed a deep appreciation for community-based services that fostered comfort and safety in therapeutic relationships while navigating life situations. This approach, supporting individuals side by side, proved to be highly effective in facilitating positive and enduring change.</p>
+				<p class="mt-4 text-lg text-gray-500">Samuel's wife, Tiffany, shares his passion for helping others, and together they lead Seasons Counseling LLC. Samuel manages the clinical division while Tiffany oversees the administrative aspects. Their joint vision led to the formation of a dedicated team of highly qualified therapists and community mentors, all committed to supporting individuals' mental health needs. This collaborative effort enables the company to provide Outpatient Mental Health Services and contribute to county mental health programs. Their mission is to offer comprehensive and compassionate support to individuals from diverse backgrounds, helping them navigate life's challenges.</p>
+				<div class="space-y-12">
+			  		<div id="leadership" class="space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
+					<h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Owners</h2>
+			  	</div>
+			  	<ul role="list" class="space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 lg:grid-cols-3 lg:gap-x-8">
+					{owners.map((owner) => (
+						<li>
+							<a class="clickable-owner" href={`/providers/${owner.slug}/`}>
+								<div class="owner-container space-y-4">
+									<div class="aspect-w-3 aspect-h-2">
+										{owner.headshot ?
+											<img class="transition duration-300 object-cover shadow-lg rounded-lg hover:shadow-2xl" src={owner.headshot[0].url} alt={owner.title}>
+											:
+											<img class="transition duration-300 object-cover shadow-lg rounded-lg hover:shadow-2xl" src="https://res.cloudinary.com/basicgenius/image/upload/v1646250153/missing-headshot_exwtou.jpg" alt={owner.title}>
+										}
+									</div>
+									<div class="space-y-2">
+										<div class="text-lg leading-6 font-medium space-y-1">
+											<h3>{owner.title}</h3>
+											<p class="text-seasons-blue-600">{owner.jobTitle}</p>
+										</div>
+									</div>
+								</div>
+							</a>
+						</li>
+				  	))}
+			  	</ul>
+				  <div class="space-y-12">
+			  		<div id="leadership" class="space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
+					<h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Leadership</h2>
+			  	</div>
+			  	<ul role="list" class="space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 lg:grid-cols-3 lg:gap-x-8">
+					{leaders.map((leader) => (
+						<li>
+							<a class="clickable-leader" href={`/providers/${leader.slug}/`}>
+								<div class="leader-container space-y-4">
+									<div class="aspect-w-3 aspect-h-2">
+										{leader.headshot ?
+											<img class="transition duration-300 object-cover shadow-lg rounded-lg hover:shadow-2xl" src={leader.headshot[0].url} alt={leader.title}>
+											:
+											<img class="transition duration-300 object-cover shadow-lg rounded-lg hover:shadow-2xl" src="https://res.cloudinary.com/basicgenius/image/upload/v1646250153/missing-headshot_exwtou.jpg" alt={leader.title}>
+										}
+									</div>
+									<div class="space-y-2">
+										<div class="text-lg leading-6 font-medium space-y-1">
+											<h3>{leader.title}</h3>
+											<p class="text-seasons-blue-600">{leader.jobTitle}</p>
+										</div>
+									</div>
+								</div>
+							</a>
+						</li>
+				  	))}
+			  	</ul>
+			</div>
+		</div>
+		</div>
+	</main>
+</Layout>
+
+
