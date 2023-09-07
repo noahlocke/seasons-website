@@ -12,6 +12,7 @@
   "dependencies": {
     "@astrojs/alpinejs": "^0.3.0",
     "@astrojs/tailwind": "^5.0.0",
+    "@cloudinary/url-gen": "^1.11.2",
     "@contentful/rich-text-html-renderer": "^16.1.1",
     "@types/alpinejs": "^3.7.2",
     "alpinejs": "^3.13.0",
