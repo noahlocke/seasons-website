@@ -1,4 +1,4 @@
-import contentful, { EntryFieldTypes } from "contentful";
+import contentful, { EntryFieldTypes, type EntriesQueries } from "contentful";
 
 export interface Person {
   contentTypeId: "person",
@@ -9,8 +9,10 @@ export interface Person {
     bio: EntryFieldTypes.RichText,
     jobTitle: EntryFieldTypes.Text,
     slug: EntryFieldTypes.Text,
-    headshot: EntryFieldTypes.Object,
-    jobType: EntryFieldTypes.Array
+    headshot: EntryFieldTypes.Object
+  },
+  metadata: {
+    tags: EntryFieldTypes.Array
   }
 }
 

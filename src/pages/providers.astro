@@ -6,11 +6,14 @@ import type { Person } from "../lib/contentful";
 
 const entries = await contentfulClient.getEntries<Person>({
   content_type: "person",
-  "metadata.tags.sys.id[all]": "jobTypeProvider"
+  "metadata.tags.sys.id[all]": "jobTypeProvider",
+  include: 10,
+  order: "fields.lastName"
 });
 
 const people = entries.items.map((item) => {
-  const { title, firstName, lastName, bio, jobTitle, slug, headshot, jobType } = item.fields;
+  const { title, firstName, lastName, bio, jobTitle, slug, headshot } = item.fields;
+  const { tags } = item.metadata;
   return {
     title,
     firstName,
@@ -18,7 +21,8 @@ const people = entries.items.map((item) => {
 	bio,
 	jobTitle,
 	slug,
-	headshot
+	headshot,
+	tags
   };
 });
 ---
@@ -26,14 +30,27 @@ const people = entries.items.map((item) => {
 <Layout>
 	<main class="overflow-hidden">
 		<div class="bg-white">
-			<div class="mx-auto py-12 px-4 max-w-7xl sm:px-6 lg:px-8 lg:py-24">
+			<div class="mx-auto py-12 px-4 max-w-7xl sm:px-6 lg:px-8 lg:py-24"
+				x-data="{
+					search: '',
+					show_item(el) {
+					return this.search === '' || el.textContent.includes(this.search)
+					}
+			  	}"">
 				<div class="space-y-12">
 			  		<div id="leadership" class="space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
 					<h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Providers</h2>
 			  	</div>
-			  	<ul role="list" class="space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 lg:grid-cols-3 lg:gap-x-8">
+				  <div>
+					<span class="isolate inline-flex rounded-md shadow-sm">
+						<button x-on:click="search = ''" :class="{'bg-seasons-blue-600': search === '','text-white': search === '', 'bg-white': search !== '', 'text-gray-900': search !== '', 'hover:bg-seasons-blue-700': search === ''}" type="button" class="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10">All</button>
+						<button x-on:click="search = 'jobTypeOutpatient'" :class="{'bg-seasons-blue-600': search === 'jobTypeOutpatient','text-white': search === 'jobTypeOutpatient', 'bg-white': search !== 'jobTypeOutpatient', 'text-gray-900': search !== 'jobTypeOutpatient', 'hover:bg-seasons-blue-700': search === 'jobTypeOutpatient'}" type="button" class="relative -ml-px inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10">Outpatient</button>
+						<button x-on:click="search = 'jobTypeCounty'" :class="{'bg-seasons-blue-600': search === 'jobTypeCounty','text-white': search === 'jobTypeCounty', 'bg-white': search !== 'jobTypeCounty', 'text-gray-900': search !== 'jobTypeCounty', 'hover:bg-seasons-blue-700': search === 'jobTypeCounty'}" type="button" class="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10">County</button>
+					  </span>
+				  </div>
+			  	<ul role="list" class="space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 lg:grid-cols-4 lg:gap-x-8">
 					{people.map((person) => (
-						<li>
+						<li x-show="show_item($el)" x-transition>
 							<a class="clickable-person" href={`/providers/${person.slug}/`}>
 								<div class="person-container space-y-4">
 									<div class="aspect-w-3 aspect-h-2">
@@ -46,7 +63,12 @@ const people = entries.items.map((item) => {
 									<div class="space-y-2">
 										<div class="text-lg leading-6 font-medium space-y-1">
 											<h3>{person.title}</h3>
-											<p class="text-seasons-blue-600">{person.jobTitle}</p>
+											<p class="text-seasons-blue-700">{person.jobTitle}</p>
+											<ul class="hidden">
+												{person.tags.map((tag) => (
+													<li>{tag.sys.id}</li>
+													))}
+											</ul>
 										</div>
 									</div>
 								</div>
