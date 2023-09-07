@@ -62,7 +62,7 @@ const leaders = leadersEntries.items.map((item) => {
 								<div class="owner-container space-y-4">
 									<div class="aspect-w-3 aspect-h-2">
 										{owner.headshot ?
-											<img class="transition duration-300 object-cover shadow-lg rounded-lg hover:shadow-2xl" src={owner.headshot[0].url} alt={owner.title}>
+											<img class="transition duration-300 object-cover shadow-lg rounded-lg hover:shadow-2xl" src={'https://res.cloudinary.com/basicgenius/image/upload/f_auto/q_auto/w_720/v' + owner.headshot[0].version + '/' + owner.headshot[0].public_id} alt={owner.title}>
 											:
 											<img class="transition duration-300 object-cover shadow-lg rounded-lg hover:shadow-2xl" src="https://res.cloudinary.com/basicgenius/image/upload/v1646250153/missing-headshot_exwtou.jpg" alt={owner.title}>
 										}

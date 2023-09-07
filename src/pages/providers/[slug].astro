@@ -43,7 +43,7 @@ const {title, jobTitle, headshot, bio} = Astro.props;
 			  <!-- Testimonial card-->
 			  <div class="relative pt-64 pb-64 rounded-2xl shadow-xl overflow-hidden">
 				{headshot ?
-					<img class="absolute inset-0 h-full w-full object-cover" src={headshot[0].url} alt={title}>
+					<img class="absolute inset-0 h-full w-full object-cover" src={'https://res.cloudinary.com/basicgenius/image/upload/f_auto/q_auto/w_720/v' + headshot[0].version + '/' + headshot[0].public_id} alt={title}>
 					:
 					<img class="absolute inset-0 h-full w-full object-cover" src="https://res.cloudinary.com/basicgenius/image/upload/v1646250153/missing-headshot_exwtou.jpg" alt={title}>
 				}
