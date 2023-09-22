@@ -40,7 +40,6 @@ const {title, jobTitle, headshot, bio} = Astro.props;
 			  </svg>
 			</div>
 			<div class="relative mx-auto max-w-md px-4 sm:max-w-3xl sm:px-6 lg:px-0 lg:max-w-none lg:py-20">
-			  <!-- Testimonial card-->
 			  <div class="relative pt-64 pb-64 rounded-2xl shadow-xl overflow-hidden">
 				{headshot ?
 					<img class="absolute inset-0 h-full w-full object-cover" src={'https://res.cloudinary.com/basicgenius/image/upload/f_auto/q_auto/w_1500/v' + headshot[0].version + '/' + headshot[0].public_id} alt={title}>

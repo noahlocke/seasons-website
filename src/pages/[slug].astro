@@ -1,0 +1,83 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { contentfulClient } from "../lib/contentful";
+import type { PageGeneral } from "../lib/contentful";
+import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
+import { BLOCKS, MARKS, INLINES } from '@contentful/rich-text-types';
+
+
+export async function getStaticPaths() {
+	const entries = await contentfulClient.getEntries<PageGeneral>({
+		content_type: "pageGeneral",
+		include: 10
+	});
+
+	const pages = entries.items.map((item) => ({
+		params: { slug: item.fields.slug },
+		props: {
+			title: item.fields.pageTitle,
+			introCopy: item.fields.introCopy,
+			personList: item.fields.personList
+		}
+	}));
+
+  	return pages;
+}
+
+const {title, introCopy, personList} = Astro.props;
+
+const options = {
+    renderNode: {
+        [BLOCKS.PARAGRAPH]: (node, next) => {
+			return `<p class="mt-4 text-lg text-gray-500">${next(node.content)}</p>`
+		},
+		[INLINES.HYPERLINK]: (node) => {
+			return `<a class="text-seasons-blue-700" href=${node.data.uri}>${node.content[0].value}</a>`
+		}
+    }
+};
+
+---
+
+<Layout>
+	<main class="overflow-hidden">
+		<div class="bg-white">
+			<div class="mx-auto py-12 px-4 max-w-7xl sm:px-6 lg:px-8 lg:py-24">
+				<div class="space-y-12">
+					<div id="About" class="space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
+				  		<h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">{ title }</h2>
+					</div>
+
+					<div set:html={documentToHtmlString(introCopy, options)}></div>
+
+					{personList.map(list => (
+					<div id={list.fields.title} class="space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
+						<h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">{ list.fields.title }</h2>
+			  		</div>
+					<ul role="list" class="space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 lg:grid-cols-3 lg:gap-x-8">
+						{list.fields.people.map(person => (
+							<li>
+								<div class="space-y-4">
+									<div class="relative">
+										<img class="transition duration-300 object-cover shadow-lg rounded-lg hover:shadow-2xl" src={'https://res.cloudinary.com/basicgenius/image/upload/f_auto/q_auto/c_fill,w_720,ar_3:2/v' + person.fields.headshot[0].version + '/' + person.fields.headshot[0].public_id} alt={person.fields.title}>
+										<div class="absolute bottom-0 px-4 py-3 bg-gray-500/60 w-full">
+											<span class="text-white font-semibold text-1xl">{person.fields.title}</span>
+											<p class="text-gray-200">
+											{person.fields.jobTitle}
+											</p>
+										</div>
+									</div>
+								</div>
+							</li>
+						))}
+					</ul>
+					))}
+
+
+			</div>
+		</div>
+		</div>
+	</main>
+</Layout>
+
+

@@ -32,18 +32,17 @@ const people = entries.items.map((item) => {
 		<div class="bg-white">
 			<div class="mx-auto py-12 px-4 max-w-7xl sm:px-6 lg:px-8 lg:py-24"
 				x-data="{
-					search: '',
+					search: 'jobTypeOutpatient',
 					show_item(el) {
 					return this.search === '' || el.textContent.includes(this.search)
 					}
 			  	}"">
 				<div class="space-y-12">
 			  		<div id="leadership" class="space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none">
-					<h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Providers</h2>
-			  	</div>
+						<h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Providers</h2>
+			  		</div>
 				  <div>
 					<span class="isolate inline-flex rounded-md shadow-sm">
-						<button x-on:click="search = ''" :class="{'bg-seasons-blue-600': search === '','text-white': search === '', 'bg-white': search !== '', 'text-gray-900': search !== '', 'hover:bg-seasons-blue-700': search === ''}" type="button" class="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10">All</button>
 						<button x-on:click="search = 'jobTypeOutpatient'" :class="{'bg-seasons-blue-600': search === 'jobTypeOutpatient','text-white': search === 'jobTypeOutpatient', 'bg-white': search !== 'jobTypeOutpatient', 'text-gray-900': search !== 'jobTypeOutpatient', 'hover:bg-seasons-blue-700': search === 'jobTypeOutpatient'}" type="button" class="relative -ml-px inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10">Outpatient</button>
 						<button x-on:click="search = 'jobTypeCounty'" :class="{'bg-seasons-blue-600': search === 'jobTypeCounty','text-white': search === 'jobTypeCounty', 'bg-white': search !== 'jobTypeCounty', 'text-gray-900': search !== 'jobTypeCounty', 'hover:bg-seasons-blue-700': search === 'jobTypeCounty'}" type="button" class="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10">County</button>
 					  </span>
@@ -57,7 +56,7 @@ const people = entries.items.map((item) => {
 									{person.headshot ?
 										<img class="transition duration-300 object-cover shadow-lg rounded-lg hover:shadow-2xl" src={'https://res.cloudinary.com/basicgenius/image/upload/f_auto/q_auto/w_720/v' + person.headshot[0].version + '/' + person.headshot[0].public_id} alt={person.title}>
 										:
-										<img class="transition duration-300 object-cover shadow-lg rounded-lg hover:shadow-2xl" src="" alt={person.title}>
+										<img class="transition duration-300 object-cover shadow-lg rounded-lg hover:shadow-2xl" src="https://res.cloudinary.com/basicgenius/image/upload/v1646250153/missing-headshot_exwtou.jpg" alt={person.title}>
 									}
 									</div>
 									<div class="space-y-2">

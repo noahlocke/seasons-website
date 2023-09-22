@@ -16,6 +16,25 @@ export interface Person {
   }
 }
 
+export interface PageGeneral {
+  contentTypeId: "pageGeneral",
+  fields: {
+    pageTitle: EntryFieldTypes.Text,
+    slug: EntryFieldTypes.Text,
+    introCopy: EntryFieldTypes.RichText,
+    personList: EntryFieldTypes.Object
+  }
+}
+
+export interface PersonList {
+  contentTypeId: "personList",
+  fields: {
+    title: EntryFieldTypes.Text,
+    introCopy: EntryFieldTypes.Text,
+    people: EntryFieldTypes.EntryLink
+  }
+}
+
 export const contentfulClient = contentful.createClient({
   space: import.meta.env.CONTENTFUL_SPACE_ID,
   accessToken: import.meta.env.DEV
